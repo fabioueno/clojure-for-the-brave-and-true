@@ -46,6 +46,17 @@
           []
           asym-body-parts))
 
+(defn hit
+  [asym-body-parts]
+  (let [sym-parts (better-symmetrize-body-parts asym-body-parts)
+        body-parts-sum-size (reduce + (map :size sym-parts))
+        target (rand body-parts-sum-size)]
+    (loop [[part & remaining] sym-parts
+           accumulated-size (:size part)]
+      (if (> accumulated-size target)
+        part
+        (recur remaining (+ accumulated-size (:size (first remaining))))))))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
